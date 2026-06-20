@@ -105,11 +105,14 @@ curl http://localhost:11434/api/tags
 
 - [x] Step 1 — Verify setup (Python, Ollama, VS Code)
 - [x] Step 2 — Project folder + virtual environment + packages installed
-- [ ] Step 3 — Extract text from PDF
-- [ ] Step 4 — Chunk text manually
-- [ ] Step 5 — Generate embeddings
-- [ ] Step 6 — Cosine similarity search
-- [ ] Step 7 — Send to Gemma, get answer
+- [x] Step 3 — Extract text from PDF (PyMuPDF / fitz)
+- [x] Step 4 — Minimal whitespace cleaning + manual chunking (chunk_size=500, overlap=100)
+- [x] Step 5 — Generate embeddings using nomic-embed-text (768 dimensions)
+- [x] Step 6 — Build vector store (simple Python list of {text, embedding})
+- [x] Step 7 — Cosine similarity search (manual implementation, no libraries)
+- [x] Step 8 — Generate grounded answers using Gemma 3 via Ollama
+
+✅ **First working end-to-end RAG pipeline complete!**
 
 ---
 
@@ -119,3 +122,18 @@ curl http://localhost:11434/api/tags
 - No API keys needed — everything runs on your machine
 - Claims/sensitive data never leaves your machine
 - LangChain is intentionally avoided — we build everything from scratch to understand internals
+- No vector DB (ChromaDB/Pinecone) needed at this scale — a Python list works fine for small datasets
+- Model used for generation: `gemma3` (pulled via `ollama pull gemma3`)
+- If `gemma3` isn't found, pull a tagged version e.g. `ollama pull gemma3:4b` and update model name in code
+
+---
+
+## 🔮 What's Next (Future Improvements)
+
+- [ ] Persist vector store to disk (currently lost on notebook restart)
+- [ ] Try ChromaDB for comparison once internals are understood
+- [ ] Improve chunking (sentence-aware / paragraph-aware instead of fixed character size)
+- [ ] Add source citation (which page/chunk the answer came from)
+- [ ] Try with a multi-page real-world PDF (insurance EOB, policy doc)
+- [ ] Build simple Streamlit UI on top of this pipeline
+- [ ] Eventually migrate to LangGraph for claims adjudication POC
